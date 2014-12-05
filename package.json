@@ -1,0 +1,70 @@
+{
+  "name": "xpush",
+  "description": "Web based Realtime Communication Platform",
+  "version": "0.0.16",
+  "keywords": [
+    "push",
+    "websocket",
+    "gcm",
+    "apn",
+    "channel"
+  ],
+  "contributors": [
+    {
+      "name": "John Kim",
+      "email": "yohany@gmail.com"
+    },
+    {
+      "name": "James Jung",
+      "email": "0nlyoung7@gmail.com"
+    }
+  ],
+  "main": "./lib/xpush.js",
+  "dependencies": {
+    "async": "^0.9.0",
+    "busboy": "^0.2.8",
+    "colors": "^0.6.2",
+    "compression": "^1.0.6",
+    "express": "^4.4.2",
+    "imagemagick-native": "1.2.2",
+    "mongoose": "3.8",
+    "node-gcm": "^0.9.11",
+    "node-zookeeper-client": "^0.2.1",
+    "optimist": "^0.6.1",
+    "passport": "^0.2.0",
+    "passport-facebook": "^1.0.3",
+    "passport-google-oauth": "^0.1.5",
+    "passport-twitter": "^1.0.2",
+    "pkginfo": "^0.3.0",
+    "redis": "~0.11.0",
+    "restify": "^2.8.1",
+    "send": "^0.6.0",
+    "shortid": "^2.0.0",
+    "socket.io": "^1.0.4",
+    "socket.io-stream": "~0.5.3",
+    "underscore": "^1.6.0",
+    "winston": "^0.7.3"
+  },
+  "devDependencies": {
+    "busboy": "^0.2.8",
+    "chai": "^1.9.1",
+    "xpush-client": ">=0.0.1",
+    "mime" : "^1.2.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xpush/node-xpush"
+  },
+  "bin": {
+    "xpush": "./bin/xpush",
+    "xpush-status": "./bin/xpush-status"
+  },
+  "license": "MIT",
+  "scripts": {
+    "test": "node test"
+  },
+  "homepage": "http://xpush.github.io",
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}

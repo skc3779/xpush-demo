@@ -1,0 +1,21 @@
+{
+  "zookeeper": {"address":"127.0.0.1:2181"},
+  "redis": {"address":"127.0.0.1:6379"},
+  "mongodb": {"address":"127.0.0.1:27017"},
+  "oauth": {
+  },
+  "apps" : [
+	{
+	  "id" : "sample",
+	  "name": "sample",
+	  "notification": {
+		"gcm": {
+		  "apiKey": ""
+		},
+		"apn": {
+		  "apiKey": ""
+		}
+	  }
+	}
+  ]
+}

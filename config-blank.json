@@ -1,0 +1,30 @@
+{
+  "zookeeper": {"address":"127.0.0.1:2181"},
+  "redis": {"address":"127.0.0.1:6379"},
+  "mongodb": {"address":"127.0.0.1:27017"},
+  "oauth": {
+		"facebook": {
+		  "key": "1508517359428736",
+		  "secret": "",
+		  "event": {
+		    "name": "login-facebook"
+		  },
+		  "callbackUrl":"/auth/facebook/callback",
+		  "success": "<script>window.close();</script>"
+		}  	
+  },
+  "apps" : [
+	  {
+		  "id" : "sample",		
+			"name": "sample",
+	    "notification": {
+	      "gcm": {
+					"apiKey": "Google API KEY for GCM Here"
+	      },
+	      "apn": {
+					"apiKey": "APNS Key Here"
+	      }
+	    }			
+	  }
+  ]
+}

@@ -1,0 +1,101 @@
+#!/usr/bin/env node
+
+var fs       = require('fs'),
+    util     = require('util'),
+    colors   = require('colors'),
+    argv     = require('optimist').argv,
+    xpush    = require('../lib/xpush');
+
+
+var help = [
+    "usage: xpush [options] ",
+    "",
+    "Starts a xpush server using the specified command-line options",
+    "",
+    "options:",
+    "  --port   PORT       Port that the xpush server should run on",
+    "  --config OUTFILE    (mandatory!) Location of the configuration file for the xpush server",
+    "  --data   DIRECTORY  Location of the base folder for the xpush server",
+    "  --host   DOMAIN     Hostname",
+    "  --session           start the session server for loadbalancing xpush servers",
+    "  --channel           start the channel server for the sending and receiving messages in real time.",
+    "  --weight            (only session server, with --session) set server weight",
+    "  --silent            Silence the log output from the xpush server",
+    "  -h, --help          You're staring at it"
+].join('\n');
+
+
+var welcome = [
+"                         _     ",
+"                        | |    ",
+"   __  ___ __  _   _ ___| |__  ",
+"   \\ \\/ / '_ \\| | | / __| '_ \\ ",
+"    >  <| |_) | |_| \\__ \\ | | |",
+"   /_/\\_\\ .__/ \\__,_|___/_| |_|",
+"        | |                    ",
+"        |_|                    ",
+""
+].join('\n');
+
+if (argv.h || argv.help || Object.keys(argv).length === 2 || !argv.config) {
+  return util.puts(help);
+}
+
+var config = {},
+    port = argv.port || 80,
+    server;
+
+try {
+  var data = fs.readFileSync(argv.config);
+  config = JSON.parse(data.toString());
+} catch (ex) {
+  util.puts('Error starting xpush server: ' + ex);
+  process.exit(1);
+}
+
+var homePath = argv.data || config.home || process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'] + '/.xpush';
+try {
+  if (!fs.existsSync(homePath)) fs.mkdirSync(homePath, 0766);
+  if (!fs.existsSync(homePath+'/'+(config.upload || 'upload'))) fs.mkdirSync(homePath+'/'+(config.upload || 'upload'), 0766);
+} catch ( e ){
+  console.log( 'Error creating xpush directory: ' + e );
+}
+
+require('../lib/util/logging')({port: port, path: homePath});
+
+config.home = homePath;
+config.silent = typeof argv.silent !== 'undefined' ? argv.silent : config.silent;
+config.port = port || config.port;
+config.host = argv.host || config.host;
+
+if(argv.session){
+  server = xpush.createSessionServer(config);
+}else{
+
+  /*
+  if ( typeof config.host  == "undefined" ) {
+
+    var errorMessage = [
+    '',
+    ' --host [Domain or IP Address]'.red + ' is required.',
+    '  or ',
+    ' Check host value in your config file'.red +' (loaded by --config)',
+    ''
+    ].join('\n');
+    return util.puts(errorMessage);
+  } */
+
+  if(argv.weight) config.weight = argv.weight;
+  if(argv.name)   config.name   = argv.name;
+
+  server = xpush.createChannelServer(config);
+}
+
+server.on('connected', function (url, port){
+  if (!config.silent) {
+    util.puts(welcome.rainbow.bold);
+    util.puts(' ' +
+      (argv.session?'Session Server'.underline.bold.green:'Channel Server'.underline.bold.green) +
+      ' now listening on port: ' + port);
+  }
+});
